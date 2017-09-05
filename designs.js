@@ -1,25 +1,35 @@
-// Select color input
-// Select size input
-document.getElementById('send').addEventListener('click', function(){
-    makeGrid();
+const sizePicker = document.querySelector('#sizePicker');
+const table = document.getElementById("pixel_canvas");
+sizePicker.addEventListener('submit', function (){
     event.preventDefault();
+    makeGrid();
 });
 
-// When size is submitted by the user, call makeGrid()
-
-function makeGrid() {
-// Your code goes here!
-    document.getElementById('pixel_canvas').innerHTML = '';
+function makeGrid(){
+    deleteTable();
     var width = document.getElementById('input_width').value;
     var height = document.getElementById('input_height').value;
-    for(var i =0; i<width; i++){
-        var row = document.createElement('tr');
-        for(var j=0; j<height; j++){
-            var col = document.createElement('td');
-            row.appendChild(col);
-            col.style.borderColor = document.getElementById("colorPicker").value;
+    for (let i = 0; i < width; i++){
+        const row = table.insertRow(i);
+        for (let j = 0; j < height; j++){
+            const cell = row.insertCell(j);
         }
-        document.getElementById('pixel_canvas').appendChild(row);    
     }
-    
+    associateCellEvents();
+}
+const associateCellEvents = function (){
+    for (let i = 0; i < table.rows.length; i++) {
+        for (let j = 0; j < table.rows[i].cells.length; j++) table.rows[i].cells[j].onclick = function () {
+            changeColor(this);
+        };
+    }
+};
+const changeColor = function (cell){
+    const colour = document.getElementById("colorPicker").value;
+    cell.style.backgroundColor = colour;
+};
+const deleteTable = function (){
+    while (table.rows.length > 0){
+        table.deleteRow(0);
+    }
 }
